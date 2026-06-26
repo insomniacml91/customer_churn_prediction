@@ -44,5 +44,5 @@ y_pred = model.predict(X_test)
 
 accuracy = accuracy_score(y_test, y_pred)
 
-print(f'Точность модель: {accuracy*100:.1f}%')
+print(f'Точность модели: {accuracy*100:.1f}%')
 print(classification_report(y_test, y_pred))
