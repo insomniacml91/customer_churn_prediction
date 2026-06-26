@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
+from catboost import CatBoostClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report
 
@@ -31,6 +32,7 @@ y = df['Churn']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+print("\n--- Запуск RandomForest ---")
 model = RandomForestClassifier(
     random_state=42, 
     class_weight='balanced', 
@@ -44,5 +46,20 @@ y_pred = model.predict(X_test)
 
 accuracy = accuracy_score(y_test, y_pred)
 
-print(f'Точность модели: {accuracy*100:.1f}%')
+print(f'Точность RandomForest: {accuracy*100:.1f}%')
 print(classification_report(y_test, y_pred))
+
+
+print("\n--- Запуск CatBoost ---")
+cat_model = CatBoostClassifier(
+    iterations=100, 
+    depth=5, 
+    class_weights=[1, 2.5], 
+    verbose=0 
+)
+cat_model.fit(X_train, y_train)
+
+cat_pred = cat_model.predict(X_test)
+
+print(f'Точность CatBoost: {accuracy_score(y_test, cat_pred)*100:.1f}%')
+print(classification_report(y_test, cat_pred))
